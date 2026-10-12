@@ -107,33 +107,21 @@ const CONFIG = {
   title: "오늘의 하루는?",
   to: "나의 별에게",
   letterUnlockAt: 5,
-  letter:
+  letters: [
 `주연 언니에게
 
 언니, 오늘 하루도 고생했어
 언니가 수많은 사람들에게 행복과 웃음을 준 것처럼,
 이 편지도 언니에게 행복과 웃음이 되길 바라
 
-- 산호가`
-};
-
-    title: "오늘의 하루는?",
-  to: "나의 별에게",
-  letterUnlockAt: 5,
-  letter:
+- 산호가`,
 `주연 언니에게
 
 언니는 늘, 항상 잘 하고 있으니까
 오늘도 무탈히 이겨냈을 것이라 믿어
 버텨줘서 고마워
 
-- 산호가`
-};
-
-    title: "오늘의 하루는?",
-  to: "나의 별에게",
-  letterUnlockAt: 5,
-  letter:
+- 산호가`,
 `주연 언니에게
 
 밥은 잘 챙겨 먹고 다니지?
@@ -141,12 +129,7 @@ const CONFIG = {
 밥을 거르면 안 돼
 한국인은 밥심이야
 
-- 산호가`
-};
-    title: "오늘의 하루는?",
-  to: "나의 별에게",
-  letterUnlockAt: 5,
-  letter:
+- 산호가`,
 `주연 언니에게
 
 이 편지를 쓰는 지금,
@@ -157,19 +140,14 @@ const CONFIG = {
 그래도 가장 하고 싶은 말을 하나만 꼽자면,
 연기해 줘서 고마워
 
-- 산호가`
-};
-
-    title: "오늘의 하루는?",
-  to: "나의 별에게",
-  letterUnlockAt: 5,
-  letter:
+- 산호가`,
 `주연 언니에게
 
 사랑해 그리고 고마워
 이것만큼은 진심이야
 
 - 산호가`
+  ]
 };
   
 // 타로: 하루에 한 장씩 정해져요. [번호, 이름, 영문, 메시지]
@@ -588,7 +566,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 function updateCount() {
   const left = CONFIG.letterUnlockAt - store.get("count", 0);
   $("letterBtn").disabled = left > 0;
-  $("count").textContent = left > 0 ? left + "번 더 뽑으면 열려요" : "";
+  $("count").textContent = left > 0 ? left + "번 더 뽑으면 열려요" : "편지가 열렸어요 ✉️";
 }
 
 function fill(kind, d, fresh) {
@@ -642,7 +620,7 @@ $("back").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preve
 const closeLetter = () => { const d = $("letterDialog"); if (d.close) d.close(); else d.removeAttribute("open"); };
 $("letterClose").onclick = closeLetter;
 $("letterDialog").onclick = (e) => { if (e.target === e.currentTarget) closeLetter(); };
-$("letterBtn").onclick = () => { $("letterText").textContent = CONFIG.letter; $("letterDialog").showModal(); };
+$("letterBtn").onclick = () => { $("letterText").textContent = pick(CONFIG.letters); $("letterDialog").showModal(); };
 updateHint(); updateCount();
 </script>
 </body>
