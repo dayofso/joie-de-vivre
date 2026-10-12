@@ -71,6 +71,7 @@
   dialog p { white-space:pre-line; margin:0 0 18px; font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; text-align:left; word-break:keep-all; }
   dialog .letter-btn { color:var(--ink); border-color:#2d6a4f; }
   @media (prefers-reduced-motion:reduce) { * { animation:none !important; transition:none !important; } }
+  .count { margin:10px 0 0; font-size:.9rem; font-weight:400; color:var(--deep); }
 </style>
 </head>
 <body>
@@ -149,7 +150,7 @@ const CONFIG = {
 - 산호가`
   ]
 };
-  
+
 // 타로: 하루에 한 장씩 정해져요. [번호, 이름, 영문, 메시지]
 const T = [
 [0,"바보","The Fool","겁 없이 한 걸음 내디뎌 보세요. 가벼운 마음이 가장 멀리 가요."],
@@ -538,8 +539,6 @@ const SONGS_COMFORT = [
   ["가을 우체국 앞에서", "윤도현"],
   ["Some", "볼빨간사춘기"]
 ];
-
-
 </script>
 <script>
 const $ = (id) => document.getElementById(id);
