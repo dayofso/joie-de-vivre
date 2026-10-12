@@ -7,40 +7,69 @@
 <title>오늘도 잘하고 있어요</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#fafaf9; --ink:#1f2328; --soft:#7b8087; --line:#d9dbde; --accent:#2f5d62;
+  :root { --night:#dcebdd; --deep:#2d6a4f; --gold:#52b788; --ivory:#fbfdf9; --ink:#1f3a2e; --soft:#5f7a6a;
     box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
-  :root:not([data-theme="light"]) { }
   *,*::before,*::after { box-sizing:inherit; }
-  html { scroll-padding-top:env(safe-area-inset-top,0px); }
-  body { margin:0; min-height:100dvh; background:var(--bg); color:var(--ink); font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; font-weight:300; line-height:1.8; display:flex; justify-content:center; }
-  main { width:100%; max-width:420px; padding:44px 24px 40px; display:flex; flex-direction:column; }
+  html { scroll-padding-top:env(safe-area-inset-top,0px); background:#edf3ec; }
+  body { margin:0; min-height:100dvh; color:var(--ink); font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; font-weight:300; line-height:1.8; display:flex; justify-content:center;
+    background:#edf3ec; }
+  main { width:100%; max-width:420px; padding:44px 24px 40px; display:flex; flex-direction:column; align-items:center; text-align:center; }
   .to { margin:0; color:var(--soft); font-size:.9rem; }
-  h1 { margin:4px 0 0; font-family:"Noto Serif KR",serif; font-weight:600; font-size:1.6rem; line-height:1.4; }
-  .tabs { display:flex; flex-wrap:wrap; gap:4px 20px; margin:32px 0 0; border-bottom:1px solid var(--line); }
-  .tab { font:inherit; font-weight:400; font-size:.95rem; color:var(--soft); background:none; border:0; border-bottom:2px solid transparent; padding:8px 0; margin-bottom:-1px; cursor:pointer; }
-  .tab[aria-selected="true"] { color:var(--ink); border-bottom-color:var(--accent); }
-  button:focus-visible,a:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
-  .stage { display:flex; flex-direction:column; align-items:center; margin:40px 0 0; }
-  .draw { width:112px; height:112px; border-radius:50%; border:1.5px solid var(--ink); background:transparent; color:var(--ink); font:inherit; font-weight:400; font-size:1rem; cursor:pointer; transition:background-color .2s,color .2s; }
-  .draw:hover,.draw:active { background:var(--ink); color:var(--bg); }
-  .hint { margin:14px 0 0; color:var(--soft); font-size:.9rem; text-align:center; }
-  .result { margin-top:36px; padding-top:28px; border-top:1px solid var(--line); animation:fade .5s ease; }
-  .result[hidden] { display:none; }
-  @keyframes fade { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none; } }
-  .label { margin:0; color:var(--accent); font-size:.9rem; font-weight:500; }
-  .main { margin:10px 0 0; font-family:"Noto Serif KR",serif; font-size:1.25rem; line-height:1.75; word-break:keep-all; }
-  .sub { margin:10px 0 0; color:var(--soft); font-size:.9rem; }
-  .link { display:inline-block; margin-top:16px; color:var(--accent); font-weight:500; text-underline-offset:4px; }
-  .again { margin:18px 0 0; padding:0; font:inherit; font-size:.9rem; color:var(--soft); background:none; border:0; text-decoration:underline; text-underline-offset:4px; cursor:pointer; display:block; }
-  footer { margin-top:auto; padding-top:48px; }
-  .letter-btn { font:inherit; font-weight:400; font-size:.9rem; color:var(--ink); background:none; border:1px solid var(--line); border-radius:6px; padding:8px 16px; cursor:pointer; }
-  .letter-btn[disabled] { color:var(--soft); cursor:default; }
+  h1 { margin:6px 0 0; font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; font-weight:600; font-size:1.6rem; line-height:1.4; }
+  .tabs { display:flex; flex-wrap:nowrap; justify-content:center; gap:5px; width:100%; margin-top:24px; }
+  .tab { font:inherit; font-weight:400; font-size:clamp(.7rem,3.3vw,.88rem); letter-spacing:-.02em; white-space:nowrap; color:var(--soft); background:transparent; border:1px solid #b4d3bd; border-radius:999px; padding:5px 10px; cursor:pointer; transition:all .2s; }
+  .tab[aria-selected="true"] { color:#fff; background:var(--deep); border-color:var(--deep); }
+  button:focus-visible,[role=button]:focus-visible,a:focus-visible { outline:2px solid var(--gold); outline-offset:3px; }
+  .hint { margin:22px 0 14px; color:var(--soft); font-size:.9rem; min-height:1.8em; }
+  .scene { width:min(300px,100%); aspect-ratio:15/26; perspective:1200px; }
+  .inner { position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .8s cubic-bezier(.3,.9,.3,1); }
+  .scene.flipped .inner { transform:rotateY(180deg); }
+  .scene.shake .inner { animation:shake .5s ease-in-out; }
+  @keyframes shake { 0%,100% { transform:rotate(0);} 25% { transform:rotate(-3deg);} 75% { transform:rotate(3deg);} }
+  .face { position:absolute; inset:0; border-radius:14px; backface-visibility:hidden; -webkit-backface-visibility:hidden; box-shadow:0 18px 40px rgba(31,58,46,.25); }
+  .back { background:linear-gradient(160deg,#3f8f68,#2d6a4f); cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .back::before { content:""; position:absolute; inset:10px; border:1px solid #d8f3dc; border-radius:8px; }
+  .back::after { content:""; position:absolute; inset:18px; border:1px solid rgba(216,243,220,.45); border-radius:5px; }
+  .back svg { width:62%; position:relative; z-index:1; }
+  .front { transform:rotateY(180deg); background:var(--ivory); color:var(--ink); padding:30px 24px 22px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .front::before { content:""; position:absolute; inset:10px; border:1px solid var(--gold); border-radius:8px; pointer-events:none; }
+  .num { margin:0; color:#2d6a4f; font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; font-size:.95rem; font-weight:600; }
+  .name { margin:6px 0 0; font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; font-size:1.5rem; font-weight:600; line-height:1.4; word-break:keep-all; }
+  .en { margin:0; color:#6b8576; font-size:.82rem; }
+  .line { width:28px; height:1px; background:var(--gold); margin:14px 0; border:0; }
+  .msg { margin:0; font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; font-size:1.02rem; line-height:1.85; word-break:keep-all; }
+  .cheer { margin:0; color:#2d6a4f; font-size:.95rem; line-height:1.75; word-break:keep-all; }
+  .by { margin:10px 0 0; color:#6b8576; font-size:.85rem; }
+  .acts { margin-top:auto; padding-top:14px; display:flex; gap:16px; font-size:.88rem; }
+  .act { font:inherit; font-weight:500; color:var(--ink); background:none; border:0; padding:0; text-decoration:underline; text-decoration-color:var(--gold); text-underline-offset:5px; cursor:pointer; }
+  .date { color:#6b8576; font-size:.85rem; }
+  .acts { flex-wrap:wrap; justify-content:center; gap:6px 14px; }
+  @media (max-width:400px) { main { padding-left:14px; padding-right:14px; } }
+  .tabs { gap:18px; }
+  .tab { border:0; border-bottom:2px solid transparent; border-radius:0; padding:6px 0; background:none; }
+  .tab[aria-selected="true"] { color:var(--ink); background:none; border-color:var(--deep); }
+  .letter-btn { border:0; border-radius:0; padding:4px 0; text-decoration:underline; text-underline-offset:5px; text-decoration-color:var(--gold); }
+  .letter-btn[disabled] { text-decoration:none; }
+  .face { box-shadow:0 6px 18px rgba(31,58,46,.18); }
+  .front::before { border-color:#a9c4b0; }
+  .acts { flex-direction:column; align-items:stretch; flex-wrap:nowrap; gap:8px; width:100%; margin-top:auto; padding-top:14px; border-top:1px solid #d6e3d9; }
+  .acts .row { display:flex; gap:8px; }
+  .acts .date { text-align:center; font-size:.8rem; }
+  .btn { flex:1; display:block; font:inherit; font-weight:500; font-size:.88rem; text-align:center; text-decoration:none; padding:9px 8px; border-radius:8px; border:1px solid #2d6a4f; background:transparent; color:#2d6a4f; cursor:pointer; transition:background-color .15s,color .15s; }
+  .btn:hover { background:#e1eee4; }
+  .btn.fill { background:#2d6a4f; color:#fff; }
+  .btn.fill:hover { background:#245a43; }
+  .btn.ghost { border-color:#d6e3d9; color:var(--soft); }
+  footer { margin-top:36px; }
+  .letter-btn { font:inherit; font-weight:400; font-size:.9rem; color:var(--deep); background:transparent; border:1px solid var(--gold); border-radius:999px; padding:8px 20px; cursor:pointer; }
+  .letter-btn[disabled] { color:#9db3a5; border-color:#c5d9cb; cursor:default; }
   .count { margin:8px 0 0; font-size:.85rem; color:var(--soft); }
-  dialog { border:0; border-radius:8px; padding:28px 26px 22px; max-width:min(380px,90vw); background:#fff; color:var(--ink); }
-  dialog::backdrop { background:rgba(31,35,40,.4); }
-  dialog p { white-space:pre-line; margin:0 0 18px; font-family:"Noto Serif KR",serif; word-break:keep-all; }
+  dialog { border:0; border-radius:14px; padding:28px 26px 22px; max-width:min(380px,90vw); background:var(--ivory); color:var(--ink); text-align:center; }
+  dialog::backdrop { background:rgba(31,58,46,.5); }
+  dialog p { white-space:pre-line; margin:0 0 18px; font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; text-align:left; word-break:keep-all; }
+  dialog .letter-btn { color:var(--ink); border-color:#2d6a4f; }
   @media (prefers-reduced-motion:reduce) { * { animation:none !important; transition:none !important; } }
 </style>
 </head>
@@ -49,85 +78,517 @@
   <p class="to" id="to"></p>
   <h1 id="title"></h1>
   <div class="tabs" role="tablist" aria-label="뽑기 종류">
-    <button class="tab" role="tab" data-tab="fortune" aria-selected="true">운세</button>
-    <button class="tab" role="tab" data-tab="cheer" aria-selected="false">응원</button>
+    <button class="tab" role="tab" data-tab="tarot" aria-selected="true">오늘의 하루는?</button>
     <button class="tab" role="tab" data-tab="power" aria-selected="false">힘이 필요할 때</button>
     <button class="tab" role="tab" data-tab="comfort" aria-selected="false">위로가 필요할 때</button>
   </div>
-  <section class="stage">
-    <button class="draw" id="draw">뽑기</button>
-    <p class="hint" id="hint"></p>
-  </section>
-  <section class="result" id="result" hidden aria-live="polite"></section>
+  <p class="hint" id="hint"></p>
+  <div class="scene" id="scene">
+    <div class="inner">
+      <div class="face back" id="back" role="button" tabindex="0" aria-label="카드 뽑기">
+        <svg viewBox="0 0 100 100" fill="none" stroke="#d8f3dc" stroke-width="1" aria-hidden="true">
+          <circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="38" opacity=".5"/>
+          <path d="M50 8 L58 42 L92 50 L58 58 L50 92 L42 58 L8 50 L42 42 Z" fill="rgba(216,243,220,.18)"/>
+          <path d="M50 24 L54 46 L76 50 L54 54 L50 76 L46 54 L24 50 L46 46 Z"/><circle cx="50" cy="50" r="3" fill="#d8f3dc"/>
+        </svg>
+      </div>
+      <div class="face front" id="front" aria-live="polite"></div>
+    </div>
+  </div>
   <footer>
-    <button class="letter-btn" id="letterBtn">편지</button>
+    <button class="letter-btn" id="letterBtn">비밀 편지</button>
     <p class="count" id="count"></p>
   </footer>
 </main>
-<dialog id="letterDialog"><p id="letterText"></p><form method="dialog"><button class="letter-btn">닫기</button></form></dialog>
-<script src="data.js"></script>
+<dialog id="letterDialog"><p id="letterText"></p><button type="button" class="letter-btn" id="letterClose">닫기</button></dialog>
+<script>
+/* ===== 여기서부터 내용 수정 영역 (이름, 편지, 운세, 응원, 노래) ===== */
+const CONFIG = {
+  title: "오늘도 잘하고 있어요",
+  to: "○○님에게",
+  letterUnlockAt: 5,
+  letter:
+`○○님께,
+
+여기에 직접 쓴 편지를 넣어 주세요.
+줄바꿈은 그대로 보여요.
+
+- 보내는 사람 드림`
+};
+
+
+// 타로: 하루에 한 장씩 정해져요. [번호, 이름, 영문, 메시지]
+const T = [
+[0,"바보","The Fool","겁 없이 한 걸음 내디뎌 보세요. 가벼운 마음이 가장 멀리 가요."],
+[1,"마법사","The Magician","필요한 건 이미 다 당신 손에 있어요."],
+[2,"여사제","The High Priestess","고요히 귀 기울이면 답은 이미 마음속에 있어요."],
+[3,"여황제","The Empress","스스로를 따뜻하게 돌봐 주세요. 풍성한 하루가 와요."],
+[4,"황제","The Emperor","중심을 잡고 있으면 흔들려도 무너지지 않아요."],
+[5,"교황","The Hierophant","배운 것을 믿으세요. 쌓아 온 기본이 당신을 지켜 줘요."],
+[6,"연인","The Lovers","마음이 끌리는 쪽이 오늘의 올바른 선택이에요."],
+[7,"전차","The Chariot","방향을 정했다면 밀고 나가세요. 승리가 가까워요."],
+[8,"힘","Strength","진짜 힘은 부드러움에서 나와요. 당신은 이미 충분히 강해요."],
+[9,"은둔자","The Hermit","잠시 멈춰 쉬어도 괜찮아요. 길은 사라지지 않아요."],
+[10,"운명의 수레바퀴","Wheel of Fortune","흐름이 당신 쪽으로 돌아오고 있어요."],
+[11,"정의","Justice","성실했던 만큼 공정한 결과가 돌아와요."],
+[12,"매달린 사람","The Hanged Man","관점을 바꾸면 막힌 곳에서 길이 보여요."],
+[13,"죽음","Death","끝은 새로운 시작의 문이에요. 놓아야 다음 장면이 열려요."],
+[14,"절제","Temperance","조급해하지 않아도 돼요. 균형 잡힌 걸음이 가장 빨라요."],
+[15,"악마","The Devil","당신을 붙잡는 걱정은 생각보다 느슨해요. 스스로 풀 수 있어요."],
+[16,"탑","The Tower","무너지는 듯해도 그 자리에 더 단단한 것이 세워져요."],
+[17,"별","The Star","어둠 속에서도 희망은 반짝이고 있어요. 곧 맑아져요."],
+[18,"달","The Moon","불안은 밤의 그림자예요. 아침이 오면 선명해져요."],
+[19,"태양","The Sun","오늘은 당신이 가장 환하게 빛나는 날이에요."],
+[20,"심판","Judgement","지금까지의 노력이 인정받는 순간이 와요."],
+[21,"세계","The World","한 장을 멋지게 마무리했어요. 박수받을 자격이 충분해요."]
+];
+const TAROT = T.map(([n, ko, en, msg]) => ({ n, ko, en, msg }));
+
+// 문자열 = 직접 쓴 응원, {t, by} = 명언
+const CHEERS = [
+  { t: "두려워하지 말라 내가 너와 함께함이라", by: "이사야 41:10" },
+  { t: "용기란 두려움이 없는 것이 아니라 두려움을 이겨내는 것이다.", by: "넬슨 만델라" },
+  { t: "할 수 없다고 생각하는 일을 해 보라.", by: "엘리너 루스벨트" },
+  { t: "한겨울 한가운데서 나는 내 안에 꺾이지 않는 여름이 있음을 알았다.", by: "알베르 카뮈" },
+  { t: "우리는 현실에서보다 상상 속에서 더 자주 괴로워한다.", by: "세네카" },
+  { t: "다시 시도하라. 다시 실패하라. 더 잘 실패하라.", by: "사뮈엘 베케트" },
+  { t: "내 안의 예술을 사랑하라, 예술 속의 나를 사랑하지 말고.", by: "스타니슬랍스키" },
+  { t: "천 리 길도 한 걸음부터.", by: "노자" },
+  { t: "공은 실제로 경기장 안에 서 있는 사람에게 돌아간다.", by: "시어도어 루스벨트" },
+  { t: "삶은 뒤돌아보아야 이해되지만, 앞을 보며 살아야 한다.", by: "키르케고르" },
+  { t: "시작이 반이다.", by: "속담" },
+  { t: "살아야 할 이유가 있는 사람은 어떤 상황도 견딜 수 있다.", by: "니체" },
+  "잘하고 있어요. 정말로요.",
+  "오늘은 한 걸음만 가요. 그거면 충분해요.",
+  "완벽하지 않아도 괜찮아요. 당신다운 게 제일 좋아요.",
+  "긴장되는 건 진심이라는 증거예요.",
+  "지나간 장면은 잊고, 다음 장면만 생각해요.",
+  "힘들 땐 잠깐 쉬어도 돼요. 쉬는 것도 실력이에요.",
+  "당신이 만든 순간들은 누군가의 소중한 기억이 돼요.",
+  "수고했어요. 오늘도 잘 해냈어요.",
+  "겁이 나도 괜찮아요. 그래도 해내는 사람이 당신이에요.",
+  "어떤 날이든 당신 편이 여기 있어요.",
+  "실수해도 세상은 무너지지 않아요. 다음 장면이 기다리고 있어요.",
+  "당신을 보고 힘을 얻는 사람이 분명히 있어요.",
+  "오늘의 당신이 어제의 당신보다 단단해요.",
+  "충분히 멋져요. 오늘도, 내일도.",
+  "숨을 천천히 내쉬어 보세요. 괜찮아요.",
+  "당신의 연기를 기다리는 사람들이 있어요.",
+  "잘하고 싶은 마음, 그것만으로 이미 반은 왔어요.",
+  "당신이 서 있는 자리는 당신이 이뤄낸 자리예요.",
+  "오늘도 무대는 당신 편이에요.",
+  "떨려도 괜찮아요. 떨림은 살아 있다는 신호예요.",
+  "당신의 한마디에 누군가는 울고 웃어요.",
+  "준비한 만큼 이미 충분해요.",
+  "한 장면씩만 생각해요. 그게 가장 빠른 길이에요.",
+  "무대 위의 당신은 정말 반짝여요.",
+  "오늘의 실수는 내일의 여유가 돼요.",
+  "숨을 크게 쉬고, 어깨를 내려놓아요.",
+  "당신은 생각보다 훨씬 멋진 사람이에요.",
+  "지금까지 잘 와 줘서 고마워요.",
+  "마음이 가벼워지는 하루가 되길 바라요.",
+  "잘하려 하지 않아도 이미 충분히 좋아요.",
+  "당신의 속도로 가면 돼요.",
+  "누군가는 지금도 당신을 응원하고 있어요.",
+  "걱정은 내려놓고, 오늘의 한 장면에 집중해요.",
+  "좋은 일이 곧 찾아올 거예요.",
+  "당신이 있어서 그 무대가 빛나요.",
+  "쉬어 가도 괜찮아요. 길은 그대로 있어요.",
+  "오늘 하루도 정말 수고 많았어요.",
+  "자신을 믿어 주세요. 우리는 이미 믿고 있어요.",
+  "한 번의 부족함이 전부는 아니에요.",
+  "당신의 노력은 반드시 어디선가 꽃을 피워요.",
+  "오늘 웃은 만큼 내일이 가벼워져요.",
+  "당신만의 색깔이 가장 아름다워요.",
+  "마음껏 해 봐요. 박수는 이미 준비돼 있어요.",
+  "두근거림을 즐겨요. 그게 시작이에요.",
+  "당신의 이야기는 계속되고 있어요.",
+  "힘들었던 만큼 단단해졌어요.",
+  "지금 이 순간도 충분히 잘하고 있어요.",
+  "당신은 혼자가 아니에요.",
+  "작은 성취도 크게 칭찬해 주세요.",
+  "오늘의 당신에게 따뜻한 차 한 잔을 권해요.",
+  "마음의 불을 천천히 키워 가요.",
+  "어제의 걱정은 이미 지나갔어요.",
+  "오늘은 나를 아껴 주는 날로 해요.",
+  "당신이 웃으면 주변이 환해져요.",
+  "넘어져도 다시 일어나는 모습이 멋져요.",
+  "당신의 열정을 늘 응원해요.",
+  "괜찮아요, 천천히 해도 돼요.",
+  "오늘 하루가 당신에게 다정하길 바라요.",
+  "잘 해낼 거예요. 이미 그래 왔으니까요.",
+  "당신이 쌓아 온 시간은 거짓말하지 않아요.",
+  "당신의 무대를 아끼는 사람이 여기 있어요.",
+  "오늘의 호흡 하나하나가 당신을 지켜 줄 거예요.",
+  "지친 날에는 잠시 눈을 감아요.",
+  "당신의 선택을 믿어요.",
+  "새로운 막이 오르면 또 새로운 당신이 있을 거예요.",
+  "끝이 아니라 다음 장면이에요.",
+  "당신이 보여 준 모든 순간에 감사해요.",
+  "앞으로도 어디서든 당신을 응원할게요.",
+  "오늘 밤은 푹 쉬어요. 내일의 당신이 고마워할 거예요.",
+  "행운이 당신 곁에 머물기를.",
+  { t: "우리가 두려워해야 할 것은 두려움 그 자체뿐이다.", by: "프랭클린 루스벨트" },
+  { t: "일곱 번 넘어져도 여덟 번 일어나라.", by: "일본 속담" },
+  { t: "어쨌든 내일은 또 다른 날이니까.", by: "소설 『바람과 함께 사라지다』" },
+  { t: "온 세상이 무대이고, 모든 남녀는 배우일 뿐이다.", by: "셰익스피어" },
+  { t: "용기를 내요, 소중한 사람.", by: "C.S. 루이스" },
+  { t: "혼자서는 할 수 있는 일이 적지만, 함께하면 많은 일을 할 수 있다.", by: "헬렌 켈러" },
+  { t: "절대, 절대, 절대 굴복하지 마라.", by: "윈스턴 처칠" },
+  { t: "세상은 모두를 꺾지만, 꺾인 자리에서 더 강해지는 사람도 많다.", by: "헤밍웨이" },
+  { t: "희망은 날개 달린 것.", by: "에밀리 디킨슨" },
+  { t: "행동을 가로막는 것이 오히려 행동을 나아가게 한다.", by: "마르쿠스 아우렐리우스" },
+  { t: "열정 없이 이룬 위대한 일은 없다.", by: "에머슨" },
+  { t: "작은 일들이 모여 큰일이 이루어진다.", by: "빈센트 반 고흐" },
+  { t: "벗어나는 가장 좋은 길은 언제나 통과하는 것이다.", by: "로버트 프로스트" },
+  { t: "고생 끝에 낙이 온다.", by: "속담" },
+  { t: "하늘이 무너져도 솟아날 구멍이 있다.", by: "속담" },
+  { t: "비 온 뒤에 땅이 굳는다.", by: "속담" },
+  { t: "호랑이한테 물려가도 정신만 차리면 산다.", by: "속담" },
+  { t: "티끌 모아 태산.", by: "속담" }
+];
+
+// [제목, 아티스트] — 링크는 유튜브 검색으로 연결돼요.
+const SONGS_POWER = [
+  ["Don't Stop Me Now", "Queen"], ["Eye of the Tiger", "Survivor"], ["Stronger", "Kelly Clarkson"],
+  ["Don't Stop Believin'", "Journey"], ["Happy", "Pharrell Williams"], ["Roar", "Katy Perry"],
+  ["Unstoppable", "Sia"], ["Believer", "Imagine Dragons"], ["Fight Song", "Rachel Platten"],
+  ["Good as Hell", "Lizzo"], ["챔피언", "싸이"], ["Celebrity", "아이유"],
+  ["Dynamite", "BTS"], ["How You Like That", "BLACKPINK"], ["말하는 대로", "처진 달팽이"],
+  ["Gonna Fly Now", "Bill Conti"],
+  ["We Will Rock You", "Queen"],
+  ["We Are the Champions", "Queen"],
+  ["Livin' on a Prayer", "Bon Jovi"],
+  ["I Will Survive", "Gloria Gaynor"],
+  ["Respect", "Aretha Franklin"],
+  ["Walking on Sunshine", "Katrina and the Waves"],
+  ["Uptown Funk", "Mark Ronson"],
+  ["Can't Stop the Feeling!", "Justin Timberlake"],
+  ["Shake It Off", "Taylor Swift"],
+  ["Firework", "Katy Perry"],
+  ["Titanium", "David Guetta"],
+  ["Wake Me Up", "Avicii"],
+  ["Levels", "Avicii"],
+  ["Tubthumping", "Chumbawamba"],
+  ["Born This Way", "Lady Gaga"],
+  ["Run the World (Girls)", "Beyoncé"],
+  ["Brave", "Sara Bareilles"],
+  ["Girl on Fire", "Alicia Keys"],
+  ["Rise Up", "Andra Day"],
+  ["This Is Me", "Keala Settle"],
+  ["A Million Dreams", "Hugh Jackman"],
+  ["Defying Gravity", "Idina Menzel"],
+  ["Let It Go", "Idina Menzel"],
+  ["Hall of Fame", "The Script"],
+  ["Counting Stars", "OneRepublic"],
+  ["Radioactive", "Imagine Dragons"],
+  ["Thunder", "Imagine Dragons"],
+  ["Whatever It Takes", "Imagine Dragons"],
+  ["Don't Stop the Music", "Rihanna"],
+  ["Dancing Queen", "ABBA"],
+  ["September", "Earth, Wind & Fire"],
+  ["Mr. Blue Sky", "Electric Light Orchestra"],
+  ["Bohemian Rhapsody", "Queen"],
+  ["Under Pressure", "Queen"],
+  ["Best Day of My Life", "American Authors"],
+  ["Shut Up and Dance", "Walk the Moon"],
+  ["Some Nights", "fun."],
+  ["Ain't No Mountain High Enough", "Marvin Gaye"],
+  ["I Gotta Feeling", "The Black Eyed Peas"],
+  ["Can't Hold Us", "Macklemore"],
+  ["Lose Yourself", "Eminem"],
+  ["Fighter", "Christina Aguilera"],
+  ["Since U Been Gone", "Kelly Clarkson"],
+  ["Dog Days Are Over", "Florence + the Machine"],
+  ["Pompeii", "Bastille"],
+  ["Pocketful of Sunshine", "Natasha Bedingfield"],
+  ["Here Comes the Sun", "The Beatles"],
+  ["Three Little Birds", "Bob Marley"],
+  ["Don't Worry Be Happy", "Bobby McFerrin"],
+  ["내 손을 잡아", "아이유"],
+  ["라일락", "아이유"],
+  ["에잇", "아이유"],
+  ["Blueming", "아이유"],
+  ["Hype Boy", "NewJeans"],
+  ["Ditto", "NewJeans"],
+  ["Super Shy", "NewJeans"],
+  ["Next Level", "aespa"],
+  ["Supernova", "aespa"],
+  ["Love Dive", "IVE"],
+  ["After LIKE", "IVE"],
+  ["ELEVEN", "IVE"],
+  ["Butter", "BTS"],
+  ["Boy With Luv", "BTS"],
+  ["불타오르네", "BTS"],
+  ["MIC Drop", "BTS"],
+  ["Permission to Dance", "BTS"],
+  ["DDU-DU DDU-DU", "BLACKPINK"],
+  ["Kill This Love", "BLACKPINK"],
+  ["Pink Venom", "BLACKPINK"],
+  ["Gee", "소녀시대"],
+  ["다시 만난 세계", "소녀시대"],
+  ["강남스타일", "싸이"],
+  ["Fantastic Baby", "BIGBANG"],
+  ["뱅뱅뱅", "BIGBANG"],
+  ["Nobody", "원더걸스"],
+  ["Ring Ding Dong", "SHINee"],
+  ["Growl", "EXO"],
+  ["Feel Special", "TWICE"],
+  ["Cheer Up", "TWICE"],
+  ["TT", "TWICE"],
+  ["God's Menu", "Stray Kids"],
+  ["Psycho", "Red Velvet"],
+  ["Red Flavor", "Red Velvet"],
+  ["사건의 지평선", "윤하"],
+  ["Stronger", "Britney Spears"],
+  ["Till I Collapse", "Eminem"],
+  ["Sweet Child o' Mine", "Guns N' Roses"],
+  ["Thunderstruck", "AC/DC"],
+  ["Highway to Hell", "AC/DC"],
+  ["Born to Run", "Bruce Springsteen"],
+  ["Mamma Mia", "ABBA"],
+  ["Take On Me", "a-ha"],
+  ["Another One Bites the Dust", "Queen"],
+  ["Don't Start Now", "Dua Lipa"],
+  ["Levitating", "Dua Lipa"],
+  ["Physical", "Dua Lipa"],
+  ["Blinding Lights", "The Weeknd"],
+  ["good 4 u", "Olivia Rodrigo"],
+  ["Flowers", "Miley Cyrus"],
+  ["Party in the U.S.A.", "Miley Cyrus"],
+  ["Hey Ya!", "OutKast"],
+  ["Crazy in Love", "Beyoncé"],
+  ["Single Ladies (Put a Ring on It)", "Beyoncé"],
+  ["Dynamite", "Taio Cruz"],
+  ["Moves Like Jagger", "Maroon 5"],
+  ["Treasure", "Bruno Mars"],
+  ["24K Magic", "Bruno Mars"],
+  ["Locked Out of Heaven", "Bruno Mars"],
+  ["Dance Monkey", "Tones and I"],
+  ["Natural", "Imagine Dragons"],
+  ["Maestro", "SEVENTEEN"],
+  ["Super", "SEVENTEEN"],
+  ["Very Nice", "SEVENTEEN"],
+  ["Power", "EXO"],
+  ["Love Shot", "EXO"],
+  ["가시나", "선미"],
+  ["Idol", "BTS"],
+  ["DNA", "BTS"],
+  ["Fake Love", "BTS"],
+  ["ON", "BTS"],
+  ["Yet To Come", "BTS"],
+  ["Sticker", "NCT 127"],
+  ["Cherry Bomb", "NCT 127"]
+];
+const SONGS_COMFORT = [
+  ["걱정말아요 그대", "이적"], ["밤편지", "아이유"], ["양화대교", "자이언티"],
+  ["우산", "에픽하이"], ["감사", "김동률"], ["모든 날, 모든 순간", "폴킴"],
+  ["야생화", "박효신"], ["두 사람", "성시경"], ["Fix You", "Coldplay"],
+  ["Lean on Me", "Bill Withers"], ["Stand by Me", "Ben E. King"], ["What a Wonderful World", "Louis Armstrong"],
+  ["Let It Be", "The Beatles"], ["Bridge over Troubled Water", "Simon & Garfunkel"], ["Don't Know Why", "Norah Jones"],
+  ["Someone Like You", "Adele"],
+  ["Make You Feel My Love", "Adele"],
+  ["Hallelujah", "Leonard Cohen"],
+  ["Yesterday", "The Beatles"],
+  ["Hey Jude", "The Beatles"],
+  ["Imagine", "John Lennon"],
+  ["Over the Rainbow", "Judy Garland"],
+  ["You've Got a Friend", "Carole King"],
+  ["A Thousand Years", "Christina Perri"],
+  ["Perfect", "Ed Sheeran"],
+  ["Photograph", "Ed Sheeran"],
+  ["Thinking Out Loud", "Ed Sheeran"],
+  ["Fast Car", "Tracy Chapman"],
+  ["Landslide", "Fleetwood Mac"],
+  ["Dreams", "Fleetwood Mac"],
+  ["The Scientist", "Coldplay"],
+  ["Yellow", "Coldplay"],
+  ["Clocks", "Coldplay"],
+  ["Paradise", "Coldplay"],
+  ["Say You Won't Let Go", "James Arthur"],
+  ["Stay With Me", "Sam Smith"],
+  ["Lost Stars", "Adam Levine"],
+  ["Skinny Love", "Bon Iver"],
+  ["Heartbeats", "José González"],
+  ["The Night We Met", "Lord Huron"],
+  ["Falling Slowly", "Glen Hansard"],
+  ["Always Remember Us This Way", "Lady Gaga"],
+  ["Shallow", "Lady Gaga"],
+  ["I'll Be There", "The Jackson 5"],
+  ["Tears in Heaven", "Eric Clapton"],
+  ["Wonderful Tonight", "Eric Clapton"],
+  ["Time After Time", "Cyndi Lauper"],
+  ["True Colors", "Cyndi Lauper"],
+  ["Count on Me", "Bruno Mars"],
+  ["Just the Way You Are", "Bruno Mars"],
+  ["Lovely Day", "Bill Withers"],
+  ["Ain't No Sunshine", "Bill Withers"],
+  ["Better Together", "Jack Johnson"],
+  ["Banana Pancakes", "Jack Johnson"],
+  ["Riptide", "Vance Joy"],
+  ["Home", "Edward Sharpe & The Magnetic Zeros"],
+  ["I'm Yours", "Jason Mraz"],
+  ["Lucky", "Jason Mraz"],
+  ["You Are the Reason", "Calum Scott"],
+  ["Let Her Go", "Passenger"],
+  ["Say Something", "A Great Big World"],
+  ["Heal the World", "Michael Jackson"],
+  ["You Raise Me Up", "Josh Groban"],
+  ["Unchained Melody", "The Righteous Brothers"],
+  ["Moon River", "Audrey Hepburn"],
+  ["La Vie en Rose", "Édith Piaf"],
+  ["Fly Me to the Moon", "Frank Sinatra"],
+  ["The Way You Look Tonight", "Frank Sinatra"],
+  ["Smile", "Nat King Cole"],
+  ["첫눈처럼 너에게 가겠다", "에일리"],
+  ["거리에서", "성시경"],
+  ["붉은 노을", "이문세"],
+  ["광화문 연가", "이문세"],
+  ["사랑이 지나가면", "이문세"],
+  ["가을 아침", "아이유"],
+  ["너의 의미", "아이유"],
+  ["마음을 드려요", "아이유"],
+  ["Love Poem", "아이유"],
+  ["나의 옛날이야기", "아이유"],
+  ["그대라는 시", "태연"],
+  ["Fine", "태연"],
+  ["봄날", "BTS"],
+  ["Life Goes On", "BTS"],
+  ["Magic Shop", "BTS"],
+  ["너를 만나", "폴킴"],
+  ["비", "폴킴"],
+  ["길", "폴킴"],
+  ["별 보러 가자", "적재"],
+  ["다행이다", "이적"],
+  ["같이 걸을까", "이적"],
+  ["I Believe", "신승훈"],
+  ["오래된 노래", "스탠딩 에그"],
+  ["나의 사춘기에게", "볼빨간사춘기"],
+  ["너의 모든 순간", "성시경"],
+  ["좋은 사람", "토이"],
+  ["가리워진 길", "유재하"],
+  ["서른 즈음에", "김광석"],
+  ["먼지가 되어", "김광석"],
+  ["우주를 줄게", "볼빨간사춘기"],
+  ["Beautiful", "Christina Aguilera"],
+  ["In My Life", "The Beatles"],
+  ["Blackbird", "The Beatles"],
+  ["Wonderwall", "Oasis"],
+  ["Don't Look Back in Anger", "Oasis"],
+  ["Everybody Hurts", "R.E.M."],
+  ["Fire and Rain", "James Taylor"],
+  ["Both Sides Now", "Joni Mitchell"],
+  ["(You Make Me Feel Like) A Natural Woman", "Aretha Franklin"],
+  ["Dream a Little Dream of Me", "Ella Fitzgerald"],
+  ["Summertime", "Ella Fitzgerald"],
+  ["Come Away With Me", "Norah Jones"],
+  ["Sunrise", "Norah Jones"],
+  ["The Rose", "Bette Midler"],
+  ["I Will Always Love You", "Whitney Houston"],
+  ["Greatest Love of All", "Whitney Houston"],
+  ["Unforgettable", "Nat King Cole"],
+  ["Bubbly", "Colbie Caillat"],
+  ["Chasing Cars", "Snow Patrol"],
+  ["Everything", "Michael Bublé"],
+  ["Haven't Met You Yet", "Michael Bublé"],
+  ["Hold On", "Wilson Phillips"],
+  ["그날들", "김광석"],
+  ["너에게 난 나에게 넌", "자전거 탄 풍경"],
+  ["숨", "박효신"],
+  ["눈의 꽃", "박효신"],
+  ["괜찮아도 괜찮아", "도경수"],
+  ["어디에도", "엠씨더맥스"],
+  ["사랑은 은하수 다방에서", "10cm"],
+  ["그라데이션", "10cm"],
+  ["봄 사랑 벚꽃 말고", "HIGH4"],
+  ["여행", "볼빨간사춘기"],
+  ["가을 우체국 앞에서", "윤도현"],
+  ["Some", "볼빨간사춘기"]
+];
+
+
+</script>
 <script>
 const $ = (id) => document.getElementById(id);
 const store = {
   get(k, d) { try { const v = localStorage.getItem("lucky." + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem("lucky." + k, JSON.stringify(v)); } catch (e) {} }
 };
-const HINTS = { fortune: "오늘의 운세를 뽑아요", cheer: "응원 한마디를 뽑아요", power: "힘이 나는 노래를 골라요", comfort: "위로가 되는 노래를 골라요" };
-let tab = "fortune";
+const HINTS = { tarot: "카드를 눌러 오늘의 하루를 확인해요", power: "카드를 눌러 힘이 나는 노래를 골라요", comfort: "카드를 눌러 위로가 되는 노래를 골라요" };
+const ROMAN = ["0","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX","XXI"];
+let tab = "tarot", busy = false;
 $("title").textContent = CONFIG.title; $("to").textContent = CONFIG.to; document.title = CONFIG.title;
 
 const today = () => { const d = new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); };
+const dateLabel = () => { const d = new Date(); return d.getFullYear() + ". " + (d.getMonth() + 1) + ". " + d.getDate(); };
 const hash = (s) => { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; };
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
-const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x) e.textContent = x; return e; };
+const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; };
+function updateHint() {
+  const s = store.get("tarot", null);
+  $("hint").textContent = tab === "tarot" && s && s.date === today() ? "오늘의 카드는 이미 뽑았어요. 카드를 누르면 다시 볼 수 있어요" : HINTS[tab];
+}
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function updateCount() {
   const left = CONFIG.letterUnlockAt - store.get("count", 0);
   $("letterBtn").disabled = left > 0;
   $("count").textContent = left > 0 ? left + "번 더 뽑으면 열려요" : "";
 }
-function again(label) { const b = el("button", "again", label); b.onclick = draw; return b; }
 
-function render(kind, d, fresh) {
-  const box = $("result"); box.replaceChildren();
-  if (kind === "fortune") {
-    const k = hash(today());
-    box.append(el("p", "label", d[0]), el("p", "main", d[1]),
-      el("p", "sub", "행운의 색 " + LUCKY_COLORS[k % LUCKY_COLORS.length] + " · 행운의 물건 " + LUCKY_ITEMS[(k >> 3) % LUCKY_ITEMS.length]));
-    if (!fresh) box.append(el("p", "sub", "운세는 하루에 한 번이에요. 내일 또 만나요."));
-  } else if (kind === "cheer") {
-    box.append(el("p", "label", typeof d === "string" ? "오늘의 한마디" : "오늘의 명언"), el("p", "main", typeof d === "string" ? d : d.t));
-    if (typeof d !== "string") box.append(el("p", "sub", d.by));
-    box.append(again("한 번 더"));
+function fill(kind, d, fresh) {
+  const f = $("front"); f.replaceChildren();
+  const acts = el("div", "acts");
+  const row = (...x) => { const r = el("div", "row"); r.append(...x); return r; };
+  const c = el("p", "cheer"), by = el("p", "by");
+  const setCheer = (q) => { c.textContent = typeof q === "string" ? q : q.t; by.textContent = typeof q === "string" ? "" : q.by; };
+  setCheer(d.cheer);
+  const home = el("button", "btn ghost", "돌아가기"); home.onclick = () => { $("scene").classList.remove("flipped"); updateHint(); };
+  if (kind === "tarot") {
+    f.append(el("p", "num", ROMAN[d.n]), el("p", "name", d.ko), el("p", "en", d.en), el("hr", "line"), el("p", "msg", d.msg), el("hr", "line"), c, by);
+    const b = el("button", "btn", "응원 한 번 더"); b.onclick = () => setCheer(pick(CHEERS));
+    acts.append(el("span", "date", dateLabel()), row(b, home));
   } else {
-    box.append(el("p", "label", kind === "power" ? "힘이 필요할 때" : "위로가 필요할 때"), el("p", "main", d[0]), el("p", "sub", d[1]));
-    const a = el("a", "link", "유튜브에서 듣기");
-    a.href = "https://www.youtube.com/results?search_query=" + encodeURIComponent(d[1] + " " + d[0]);
+    f.append(el("p", "num", "오늘의 추천곡"), el("p", "name", d.s[0]), el("p", "en", d.s[1]), el("hr", "line"), c, by);
+    const a = el("a", "btn fill", "유튜브에서 듣기");
+    a.href = "https://www.youtube.com/results?search_query=" + encodeURIComponent(d.s[1] + " " + d.s[0]);
     a.target = "_blank"; a.rel = "noopener";
-    box.append(a, again("다른 노래"));
+    const b = el("button", "btn", "다른 추천곡"); b.onclick = () => draw();
+    acts.append(a, row(b, home));
   }
-  box.hidden = false; box.style.animation = "none"; void box.offsetWidth; box.style.animation = "";
+  f.append(acts);
 }
 
-function draw() {
+async function draw() {
+  if (busy) return; busy = true;
+  const scene = $("scene");
+  if (scene.classList.contains("flipped")) { scene.classList.remove("flipped"); await wait(500); }
+  scene.classList.add("shake"); await wait(500); scene.classList.remove("shake");
   let d, fresh = true;
-  if (tab === "fortune") {
-    const s = store.get("fortune", null);
-    if (s && s.date === today()) { d = FORTUNES[s.i % FORTUNES.length]; fresh = false; }
-    else { const i = hash(today()) % FORTUNES.length; store.set("fortune", { date: today(), i }); d = FORTUNES[i]; }
-  } else d = pick({ cheer: CHEERS, power: SONGS_POWER, comfort: SONGS_COMFORT }[tab]);
+  if (tab === "tarot") {
+    const s = store.get("tarot", null);
+    const i = hash(today()) % TAROT.length, c = hash(today() + "c") % CHEERS.length;
+    if (s && s.date === today()) fresh = false; else store.set("tarot", { date: today() });
+    d = { ...TAROT[i], cheer: CHEERS[c] };
+  } else d = { s: pick(tab === "power" ? SONGS_POWER : SONGS_COMFORT), cheer: pick(CHEERS) };
   if (fresh) { store.set("count", store.get("count", 0) + 1); updateCount(); }
-  render(tab, d, fresh);
+  fill(tab, d, fresh);
+  scene.classList.add("flipped"); updateHint();
+  busy = false;
 }
 
 document.querySelectorAll(".tab").forEach((b) => b.onclick = () => {
   tab = b.dataset.tab;
   document.querySelectorAll(".tab").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
-  $("hint").textContent = HINTS[tab]; $("result").hidden = true;
+  updateHint(); $("scene").classList.remove("flipped");
 });
-$("draw").onclick = draw;
+$("back").onclick = draw;
+$("back").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); draw(); } };
+const closeLetter = () => { const d = $("letterDialog"); if (d.close) d.close(); else d.removeAttribute("open"); };
+$("letterClose").onclick = closeLetter;
+$("letterDialog").onclick = (e) => { if (e.target === e.currentTarget) closeLetter(); };
 $("letterBtn").onclick = () => { $("letterText").textContent = CONFIG.letter; $("letterDialog").showModal(); };
-$("hint").textContent = HINTS.fortune; updateCount();
+updateHint(); updateCount();
 </script>
 </body>
 </html>
