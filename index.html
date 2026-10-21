@@ -57,6 +57,13 @@
   dialog::backdrop { background:rgba(31,58,46,.5); }
   dialog p { white-space:pre-line; margin:0 0 18px; text-align:left; word-break:keep-all; }
   dialog .letter-btn { color:var(--ink); border-color:var(--deep); }
+  .letters-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .letter-btn.on { background:var(--deep); color:#fff; border-color:var(--deep); }
+  dialog { width:min(380px,90vw); max-height:80vh; overflow:auto; }
+  .dlg-title { margin:0 0 6px; font-weight:600; text-align:left; }
+  .dlg-acts { display:flex; gap:10px; justify-content:center; }
+  .arch-item { display:block; width:100%; text-align:left; font:inherit; color:var(--ink); background:none; border:0; border-bottom:1px solid var(--line); padding:10px 2px; cursor:pointer; }
+  .arch-item small { display:block; color:var(--soft); font-size:.8rem; }
   @media (max-width:400px) { main { padding-left:14px; padding-right:14px; } }
   @media (prefers-reduced-motion:reduce) { * { animation:none !important; transition:none !important; } }
 </style>
@@ -84,59 +91,21 @@
     </div>
   </div>
   <footer>
-    <button class="letter-btn" id="letterBtn">비밀 편지</button>
+    <div class="letters-row">
+      <button class="letter-btn" id="newLetterBtn">새 편지</button>
+      <button class="letter-btn" id="archiveBtn">보관함</button>
+    </div>
     <p class="count" id="count"></p>
   </footer>
 </main>
-<dialog id="letterDialog"><p id="letterText"></p><button type="button" class="letter-btn" id="letterClose">닫기</button></dialog>
+<dialog id="letterDialog"><div id="dlgBody"></div><div class="dlg-acts" id="dlgActs"></div></dialog>
 <script>
 /* ===== 여기서부터 내용 수정 영역 (이름, 편지, 운세, 응원, 노래) ===== */
 const CONFIG = {
   title: "오늘의 하루는?",
   to: "나의 별에게",
-  letterUnlockAt: 5,
-  // 편지 추가: 아래 letters 안에 `...` 블록을 하나 더 만들고, 앞 블록 끝에 쉼표(,)를 붙이세요.
-  letters: [
-`주연 언니에게
-
-언니, 오늘 하루도 고생했어
-언니가 수많은 사람들에게 행복과 웃음을 준 것처럼,
-이 편지도 언니에게 행복과 웃음이 되길 바라
-
-- 산호가`,
-`주연 언니에게
-
-언니는 늘, 항상 잘 하고 있으니까
-오늘도 무탈히 이겨냈을 것이라 믿어
-버텨줘서 고마워
-
-- 산호가`,
-`주연 언니에게
-
-밥은 잘 챙겨 먹고 다니지?
-바쁘다고, 힘 없다고, 귀찮다고
-밥을 거르면 안 돼
-한국인은 밥심이야
-
-- 산호가`,
-`주연 언니에게
-
-이 편지를 쓰는 지금,
-언니에게 하고 싶은 말이 많아서
-정리가 안 돼
-그만큼 언니에게 좋은 말을
-많이 해 주고 싶은가 봐
-그래도 가장 하고 싶은 말을 하나만 꼽자면,
-연기해 줘서 고마워
-
-- 산호가`,
-`주연 언니에게
-
-사랑해 그리고 고마워
-이것만큼은 진심이야
-
-- 산호가`
-  ]
+  letterUnlockAt: 5   // '오늘의 하루는?'를 이만큼 뽑을 때마다 편지가 한 통 도착해요
+  // 편지 내용은 letters.txt 파일에 있어요.
 };
 
 
@@ -559,10 +528,29 @@ function updateHint() {
   const s = store.get("tarot", null);
   $("hint").textContent = tab === "tarot" && s && s.date === today() ? "오늘의 카드는 이미 뽑았어요\n카드를 누르면 다시 볼 수 있어요" : HINTS[tab];
 }
+const EVERY = CONFIG.letterUnlockAt || 5;
+let LETTERS = [];
+async function loadLetters() {
+  try {
+    const r = await fetch("letters.txt?t=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) return false;
+    LETTERS = (await r.text()).replace(/\r/g, "").split(/^[ \t]*-{3,}[ \t]*$/m).map((s) => s.trim()).filter(Boolean);
+    return true;
+  } catch (e) { return false; }
+}
+function addProgress() {
+  const p = store.get("progress", 0) + 1;
+  if (p >= EVERY) { store.set("progress", 0); store.set("pending", store.get("pending", 0) + 1); }
+  else store.set("progress", p);
+  updateCount();
+}
 function updateCount() {
-  const left = CONFIG.letterUnlockAt - store.get("count", 0);
-  $("letterBtn").disabled = left > 0;
-  $("count").textContent = left > 0 ? left + "번 더 뽑으면 열려요" : "편지가 열렸어요 ✉️";
+  const pending = store.get("pending", 0), n = store.get("opened", []).length, p = store.get("progress", 0);
+  const nb = $("newLetterBtn");
+  nb.disabled = pending < 1; nb.classList.toggle("on", pending > 0);
+  nb.textContent = pending > 1 ? "새 편지 열기 (" + pending + ")" : pending > 0 ? "새 편지 열기" : "새 편지";
+  $("archiveBtn").textContent = "보관함 " + n;
+  $("count").textContent = pending > 0 ? "편지가 도착했어요 ✉️" : "오늘의 하루를 " + (EVERY - p) + "번 더 뽑으면 편지가 도착해요";
 }
 
 function fill(kind, d) {
@@ -601,7 +589,7 @@ async function draw() {
     if (s && s.date === today()) fresh = false; else store.set("tarot", { date: today() });
     d = { ...TAROT[i], cheer: CHEERS[c] };
   } else d = { s: pick(tab === "power" ? SONGS_POWER : SONGS_COMFORT), cheer: pick(CHEERS) };
-  if (fresh) { store.set("count", store.get("count", 0) + 1); updateCount(); }
+  if (fresh && tab === "tarot") addProgress();
   fill(tab, d);
   scene.classList.add("flipped"); updateHint();
   busy = false;
@@ -614,11 +602,46 @@ document.querySelectorAll(".tab").forEach((b) => b.onclick = () => {
 });
 $("back").onclick = draw;
 $("back").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); draw(); } };
-const closeLetter = () => { const d = $("letterDialog"); if (d.close) d.close(); else d.removeAttribute("open"); };
-$("letterClose").onclick = closeLetter;
-$("letterDialog").onclick = (e) => { if (e.target === e.currentTarget) closeLetter(); };
-$("letterBtn").onclick = () => { $("letterText").textContent = pick(CONFIG.letters); $("letterDialog").showModal(); };
-updateHint(); updateCount();
+const dlg = $("letterDialog");
+const closeLetter = () => { if (dlg.close) dlg.close(); else dlg.removeAttribute("open"); };
+dlg.onclick = (e) => { if (e.target === dlg) closeLetter(); };
+const dShort = (ts) => { const d = new Date(ts); return d.getFullYear() + ". " + (d.getMonth() + 1) + ". " + d.getDate(); };
+function dialog(bodyNodes, buttons) {
+  $("dlgBody").replaceChildren(...bodyNodes);
+  $("dlgActs").replaceChildren(...buttons.map(([t, fn]) => { const b = el("button", "letter-btn", t); b.onclick = fn; return b; }));
+  if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); }
+}
+const viewLetter = (text) => dialog([el("p", "", text)], [["보관함 보기", viewArchive], ["닫기", closeLetter]]);
+const viewMsg = (text) => dialog([el("p", "", text)], [["닫기", closeLetter]]);
+async function viewArchive() {
+  const list = store.get("opened", []);
+  await loadLetters();
+  const nodes = [el("p", "dlg-title", "보관함")];
+  if (!list.length) nodes.push(el("p", "", "아직 열어 본 편지가 없어요."));
+  list.map((it, k) => ({ it, n: k + 1 })).reverse().forEach(({ it, n }) => {
+    const text = LETTERS[it.i] || it.text;
+    const lines = text.split("\n").map((s) => s.trim()).filter(Boolean);
+    const pv = (lines[1] || lines[0] || "").slice(0, 22);
+    const b = el("button", "arch-item", "편지 " + n); b.append(el("small", "", dShort(it.date) + " · " + pv));
+    b.onclick = () => dialog([el("p", "", text)], [["목록으로", viewArchive], ["닫기", closeLetter]]);
+    nodes.push(b);
+  });
+  dialog(nodes, [["닫기", closeLetter]]);
+}
+async function openNew() {
+  const pending = store.get("pending", 0); if (pending < 1) return;
+  if (!(await loadLetters())) return viewMsg("편지를 불러오지 못했어요. 잠시 뒤에 다시 눌러 주세요.");
+  const opened = store.get("opened", []), used = new Set(opened.map((o) => o.i));
+  const left = LETTERS.map((_, i) => i).filter((i) => !used.has(i));
+  if (!left.length) return viewMsg("지금은 새 편지가 없어요. 편지가 더 채워지면 여기서 열 수 있어요.");
+  const i = pick(left);
+  opened.push({ i, text: LETTERS[i], date: Date.now() });
+  store.set("opened", opened); store.set("pending", pending - 1); updateCount();
+  viewLetter(LETTERS[i]);
+}
+$("newLetterBtn").onclick = openNew;
+$("archiveBtn").onclick = viewArchive;
+updateHint(); updateCount(); loadLetters();
 </script>
 </body>
 </html>
