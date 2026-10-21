@@ -513,6 +513,10 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem("lucky." + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem("lucky." + k, JSON.stringify(v)); } catch (e) {} }
 };
+  if (/[?&]letter/.test(location.search)) {
+  store.set("pending", store.get("pending", 0) + 1);
+  try { history.replaceState(null, "", location.pathname); } catch (e) {}
+}
 const HINTS = { tarot: "카드를 눌러 오늘의 하루를 확인해요", power: "카드를 눌러 힘이 나는 노래를 골라요", comfort: "카드를 눌러 위로가 되는 노래를 골라요" };
 const ROMAN = ["0","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX","XXI"];
 let tab = "tarot", busy = false;
